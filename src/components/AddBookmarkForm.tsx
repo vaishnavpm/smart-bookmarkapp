@@ -36,78 +36,78 @@ export default function AddBookmarkForm({ onAdd, isLoading, existingBookmarks }:
     return parts.every((p) => p.length > 0 && /^[a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?$/.test(p))
   }
 
-  const  validate = (): { title?: string; url?: string } => {
-  const newErrors: { title?: string; url?: string } = {}
+  const validate = (): { title?: string; url?: string } => {
+    const newErrors: { title?: string; url?: string } = {}
 
-  const cleanTitle = normalizeTitle(title)
+    const cleanTitle = normalizeTitle(title)
 
-  // 🔹 TITLE VALIDATION
-  if (!cleanTitle) {
-    newErrors.title = 'Title is required'
-  } else if (cleanTitle.length < 2) {
-    newErrors.title = 'Title is too short'
-  } else if (cleanTitle.length > 200) {
-    newErrors.title = 'Title must be 200 characters or less'
-  } else if (/[\x00-\x1F\x7F]/.test(cleanTitle)) {
-    newErrors.title = 'Title contains invalid characters'
-  }
-
-  // 🔹 URL VALIDATION
-  const trimmedUrl = url.trim()
-
-  if (!trimmedUrl) {
-    newErrors.url = 'URL is required'
-  } else {
-    try {
-      const normalized = normalizeUrl(trimmedUrl) // should auto-add https if missing
-      const parsed = new URL(normalized)
-
-      if (!['http:', 'https:'].includes(parsed.protocol)) {
-        newErrors.url = 'Only http and https URLs are allowed'
-        return newErrors
-      }
-
-      if (normalized.length > 2048) {
-        newErrors.url = 'URL is too long'
-        return newErrors
-      }
-
-      const domain = getDomain(normalized)
-
-      const isLocalhost =
-        parsed.hostname === 'localhost' ||
-        parsed.hostname.startsWith('127.') ||
-        parsed.hostname.endsWith('.local')
-
-      const ALLOW_LOCALHOST = false // 🔧 change to true if you want dev URLs
-
-      if (!domain && !(ALLOW_LOCALHOST && isLocalhost)) {
-        newErrors.url = 'Enter a valid public domain'
-        return newErrors
-      }
-
-      // 4️⃣ normalize for duplicate comparison
-      const normalizedForCompare = normalized
-        .toLowerCase()
-        .replace(/\/$/, '') // remove trailing slash
-
-      const isDuplicate = existingBookmarks.some((b) => {
-        const existingNormalized = b.url
-          .toLowerCase()
-          .replace(/\/$/, '')
-        return existingNormalized === normalizedForCompare
-      })
-
-      if (isDuplicate) {
-        newErrors.url = 'This URL is already in your bookmarks'
-      }
-    } catch {
-      newErrors.url = 'Enter a valid URL (e.g., https://example.com)'
+    // 🔹 TITLE VALIDATION
+    if (!cleanTitle) {
+      newErrors.title = 'Title is required'
+    } else if (cleanTitle.length < 2) {
+      newErrors.title = 'Title is too short'
+    } else if (cleanTitle.length > 200) {
+      newErrors.title = 'Title must be 200 characters or less'
+    } else if (/[\x00-\x1F\x7F]/.test(cleanTitle)) {
+      newErrors.title = 'Title contains invalid characters'
     }
-  }
 
-  return newErrors
-}
+    // 🔹 URL VALIDATION
+    const trimmedUrl = url.trim()
+
+    if (!trimmedUrl) {
+      newErrors.url = 'URL is required'
+    } else {
+      try {
+        const normalized = normalizeUrl(trimmedUrl) // should auto-add https if missing
+        const parsed = new URL(normalized)
+
+        if (!['http:', 'https:'].includes(parsed.protocol)) {
+          newErrors.url = 'Only http and https URLs are allowed'
+          return newErrors
+        }
+
+        if (normalized.length > 2048) {
+          newErrors.url = 'URL is too long'
+          return newErrors
+        }
+
+        const domain = getDomain(normalized)
+
+        const isLocalhost =
+          parsed.hostname === 'localhost' ||
+          parsed.hostname.startsWith('127.') ||
+          parsed.hostname.endsWith('.local')
+
+        const ALLOW_LOCALHOST = false // 🔧 change to true if you want dev URLs
+
+        if (!domain && !(ALLOW_LOCALHOST && isLocalhost)) {
+          newErrors.url = 'Enter a valid public domain'
+          return newErrors
+        }
+
+        // 4️⃣ normalize for duplicate comparison
+        const normalizedForCompare = normalized
+          .toLowerCase()
+          .replace(/\/$/, '') // remove trailing slash
+
+        const isDuplicate = existingBookmarks.some((b) => {
+          const existingNormalized = b.url
+            .toLowerCase()
+            .replace(/\/$/, '')
+          return existingNormalized === normalizedForCompare
+        })
+
+        if (isDuplicate) {
+          newErrors.url = 'This URL is already in your bookmarks'
+        }
+      } catch {
+        newErrors.url = 'Enter a valid URL (e.g., https://example.com)'
+      }
+    }
+
+    return newErrors
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -125,9 +125,9 @@ export default function AddBookmarkForm({ onAdd, isLoading, existingBookmarks }:
   return (
     <form
       onSubmit={handleSubmit}
-      className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm"
+      className="glass-strong rounded-2xl p-5 shadow-lg"
     >
-      <h2 className="text-sm font-semibold text-gray-700 mb-4">Add New Bookmark</h2>
+      <h2 className="text-sm font-semibold text-white mb-4">Add New Bookmark</h2>
 
       <div className="grid sm:grid-cols-2 gap-3">
         {/* Title input */}
@@ -141,14 +141,11 @@ export default function AddBookmarkForm({ onAdd, isLoading, existingBookmarks }:
               if (errors.title) setErrors((prev) => ({ ...prev, title: undefined }))
             }}
             disabled={isLoading}
-            className={`w-full px-3 py-2.5 rounded-lg border text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-              errors.title
-                ? 'border-red-300 bg-red-50'
-                : 'border-gray-200 bg-gray-50 hover:border-gray-300'
-            }`}
+            className={`w-full px-3 py-2.5 rounded-lg text-sm dark-input ${errors.title ? 'error' : ''
+              }`}
           />
           {errors.title && (
-            <p className="text-xs text-red-500 mt-1">{errors.title}</p>
+            <p className="text-xs text-red-400 mt-1">{errors.title}</p>
           )}
         </div>
 
@@ -163,14 +160,11 @@ export default function AddBookmarkForm({ onAdd, isLoading, existingBookmarks }:
               if (errors.url) setErrors((prev) => ({ ...prev, url: undefined }))
             }}
             disabled={isLoading}
-            className={`w-full px-3 py-2.5 rounded-lg border text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-              errors.url
-                ? 'border-red-300 bg-red-50'
-                : 'border-gray-200 bg-gray-50 hover:border-gray-300'
-            }`}
+            className={`w-full px-3 py-2.5 rounded-lg text-sm dark-input ${errors.url ? 'error' : ''
+              }`}
           />
           {errors.url && (
-            <p className="text-xs text-red-500 mt-1">{errors.url}</p>
+            <p className="text-xs text-red-400 mt-1">{errors.url}</p>
           )}
         </div>
       </div>
@@ -179,7 +173,7 @@ export default function AddBookmarkForm({ onAdd, isLoading, existingBookmarks }:
         <button
           type="submit"
           disabled={isLoading}
-          className="px-4 py-2.5 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-2 cursor-pointer"
+          className="px-5 py-2.5 text-white text-sm font-medium rounded-lg gradient-btn flex items-center gap-2 cursor-pointer disabled:cursor-not-allowed"
         >
           {isLoading ? (
             <>

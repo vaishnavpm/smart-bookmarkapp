@@ -41,9 +41,27 @@ export default function BookmarkCard({ bookmark, onDelete }: BookmarkCardProps) 
 
   return (
     <>
-      <div className="group bg-white rounded-xl border border-gray-100 px-4 py-3.5 hover:border-gray-200 hover:shadow-sm transition-all duration-200 flex items-center gap-4">
+      <div
+        className="group glass rounded-xl px-4 py-3.5 flex items-center gap-4 transition-all duration-200"
+        style={{
+          cursor: 'default',
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.background = 'var(--glass-hover)'
+          e.currentTarget.style.borderColor = 'rgba(99, 102, 241, 0.2)'
+          e.currentTarget.style.boxShadow = '0 0 20px rgba(99, 102, 241, 0.08)'
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.background = 'var(--glass-bg)'
+          e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.08)'
+          e.currentTarget.style.boxShadow = 'none'
+        }}
+      >
         {/* Favicon */}
-        <div className="w-8 h-8 rounded-lg bg-gray-50 flex items-center justify-center flex-shrink-0 overflow-hidden">
+        <div
+          className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden"
+          style={{ background: 'var(--glass-input)' }}
+        >
           {faviconUrl && !faviconError ? (
             <img
               src={faviconUrl}
@@ -54,7 +72,8 @@ export default function BookmarkCard({ bookmark, onDelete }: BookmarkCardProps) 
             />
           ) : (
             <svg
-              className="w-4 h-4 text-gray-300"
+              className="w-4 h-4"
+              style={{ color: 'var(--text-muted)' }}
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -75,18 +94,21 @@ export default function BookmarkCard({ bookmark, onDelete }: BookmarkCardProps) 
             href={bookmark.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="font-medium text-gray-900 hover:text-blue-600 transition-colors text-sm block truncate"
+            className="font-medium text-white hover:text-indigo-400 transition-colors text-sm block truncate"
           >
             {bookmark.title}
           </a>
-          <p className="text-xs text-gray-400 mt-0.5 truncate">
+          <p className="text-xs mt-0.5 truncate" style={{ color: 'var(--text-muted)' }}>
             {getDomain(bookmark.url)}
           </p>
         </div>
 
         {/* Actions */}
         <div className="flex items-center gap-2 flex-shrink-0">
-          <span className="text-xs text-gray-400 hidden group-hover:block whitespace-nowrap">
+          <span
+            className="text-xs hidden group-hover:block whitespace-nowrap"
+            style={{ color: 'var(--text-muted)' }}
+          >
             {new Date(bookmark.created_at).toLocaleDateString('en-US', {
               month: 'short',
               day: 'numeric',
@@ -97,7 +119,16 @@ export default function BookmarkCard({ bookmark, onDelete }: BookmarkCardProps) 
             onClick={() => setShowConfirm(true)}
             disabled={isDeleting}
             aria-label={`Delete ${bookmark.title}`}
-            className="w-8 h-8 rounded-lg flex items-center justify-center text-gray-400 hover:text-red-500 hover:bg-red-50 transition-all disabled:opacity-50 cursor-pointer"
+            className="w-8 h-8 rounded-lg flex items-center justify-center transition-all disabled:opacity-50 cursor-pointer"
+            style={{ color: 'var(--text-muted)' }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.color = '#ef4444'
+              e.currentTarget.style.background = 'var(--danger-soft)'
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.color = 'var(--text-muted)'
+              e.currentTarget.style.background = 'transparent'
+            }}
           >
             {isDeleting ? (
               <svg className="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
@@ -134,7 +165,7 @@ export default function BookmarkCard({ bookmark, onDelete }: BookmarkCardProps) 
         </div>
       </div>
 
-      {/* Confirmation modal — rendered outside the card to avoid z-index issues */}
+      {/* Confirmation modal */}
       {showConfirm && (
         <ConfirmDialog
           title="Delete bookmark?"

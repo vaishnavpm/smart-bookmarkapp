@@ -53,18 +53,31 @@ export default function ConfirmDialog({
     >
       {/* Dimmed overlay — click to cancel */}
       <div
-        className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+        className="absolute inset-0"
+        style={{
+          background: 'rgba(0, 0, 0, 0.6)',
+          backdropFilter: 'blur(8px)',
+          WebkitBackdropFilter: 'blur(8px)',
+        }}
         onClick={onCancel}
         aria-hidden="true"
       />
 
       {/* Dialog panel */}
-      <div className="relative bg-white rounded-2xl shadow-xl w-full max-w-sm p-6 flex flex-col gap-4">
+      <div
+        className="relative glass-strong rounded-2xl shadow-2xl w-full max-w-sm p-6 flex flex-col gap-4 animate-fade-in"
+      >
         {/* Icon + title */}
         <div className="flex items-start gap-4">
-          <div className="w-10 h-10 rounded-full bg-red-50 flex items-center justify-center flex-shrink-0">
+          <div
+            className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0"
+            style={{
+              background: 'var(--danger-soft)',
+              boxShadow: '0 0 15px var(--danger-glow)',
+            }}
+          >
             <svg
-              className="w-5 h-5 text-red-500"
+              className="w-5 h-5 text-red-400"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -80,11 +93,11 @@ export default function ConfirmDialog({
           <div className="min-w-0">
             <h2
               id="confirm-dialog-title"
-              className="text-base font-semibold text-gray-900"
+              className="text-base font-semibold text-white"
             >
               {title}
             </h2>
-            <p className="text-sm text-gray-500 mt-1 leading-relaxed">
+            <p className="text-sm mt-1 leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
               {description}
             </p>
           </div>
@@ -96,14 +109,23 @@ export default function ConfirmDialog({
             ref={cancelRef}
             onClick={onCancel}
             disabled={isLoading}
-            className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50 cursor-pointer"
+            className="px-4 py-2 text-sm font-medium rounded-lg transition-all disabled:opacity-50 cursor-pointer hover:scale-[1.02]"
+            style={{
+              color: 'var(--text-secondary)',
+              background: 'var(--glass-bg)',
+              border: '1px solid var(--glass-border)',
+            }}
           >
             Cancel
           </button>
           <button
             onClick={onConfirm}
             disabled={isLoading}
-            className="px-4 py-2 text-sm font-medium text-white bg-red-500 rounded-lg hover:bg-red-600 transition-colors disabled:opacity-50 flex items-center gap-2 cursor-pointer"
+            className="px-4 py-2 text-sm font-medium text-white rounded-lg transition-all disabled:opacity-50 flex items-center gap-2 cursor-pointer hover:scale-[1.02]"
+            style={{
+              background: 'linear-gradient(135deg, #ef4444, #dc2626)',
+              boxShadow: '0 4px 15px var(--danger-glow)',
+            }}
           >
             {isLoading ? (
               <>
