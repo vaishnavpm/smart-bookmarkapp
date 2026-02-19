@@ -22,12 +22,27 @@ export default function LoginButton() {
     <button
       onClick={handleLogin}
       disabled={isLoading}
-      className="w-full flex items-center justify-center gap-3 px-4 py-3 bg-white border-2 border-gray-200 rounded-xl hover:border-gray-300 hover:shadow-sm transition-all duration-200 font-medium text-gray-700 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:border-gray-200 disabled:hover:shadow-none"
+      className="w-full flex items-center justify-center gap-3 px-4 py-3.5 rounded-xl font-medium text-white cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed transition-all duration-200 hover:scale-[1.02] active:scale-[0.99]"
+      style={{
+        background: 'var(--glass-bg)',
+        border: '1px solid var(--glass-border)',
+      }}
+      onMouseEnter={(e) => {
+        if (!isLoading) {
+          e.currentTarget.style.background = 'var(--glass-hover)'
+          e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.15)'
+        }
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.background = 'var(--glass-bg)'
+        e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.08)'
+      }}
     >
       {isLoading ? (
         <>
           <svg
-            className="w-5 h-5 flex-shrink-0 animate-spin text-gray-400"
+            className="w-5 h-5 flex-shrink-0 animate-spin"
+            style={{ color: 'var(--text-muted)' }}
             fill="none"
             viewBox="0 0 24 24"
           >
@@ -45,7 +60,7 @@ export default function LoginButton() {
               d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
             />
           </svg>
-          Authenticating…
+          <span style={{ color: 'var(--text-secondary)' }}>Authenticating…</span>
         </>
       ) : (
         <>

@@ -20,12 +20,24 @@ export default function LogoutButton() {
     <button
       onClick={handleLogout}
       disabled={isLoading}
-      className="text-sm px-3 py-1.5 rounded-lg text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1.5"
+      className="text-sm px-3 py-1.5 rounded-lg transition-all duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1.5 hover:scale-[1.02]"
+      style={{
+        color: 'var(--text-muted)',
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.color = 'var(--text-primary)'
+        e.currentTarget.style.background = 'rgba(255, 255, 255, 0.08)'
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.color = 'var(--text-muted)'
+        e.currentTarget.style.background = 'transparent'
+      }}
     >
       {isLoading ? (
         <>
           <svg
-            className="w-3.5 h-3.5 animate-spin text-gray-400"
+            className="w-3.5 h-3.5 animate-spin"
+            style={{ color: 'var(--text-muted)' }}
             fill="none"
             viewBox="0 0 24 24"
           >

@@ -41,15 +41,23 @@ export default function UserAvatar({ name, avatarUrl, size = 'sm' }: UserAvatarP
         src={avatarUrl}
         alt={name}
         referrerPolicy="no-referrer"
-        className={`${dimension} rounded-full object-cover ring-2 ring-white flex-shrink-0`}
+        className={`${dimension} rounded-full object-cover flex-shrink-0`}
+        style={{
+          border: '2px solid rgba(255, 255, 255, 0.15)',
+          boxShadow: '0 0 10px rgba(99, 102, 241, 0.15)',
+        }}
       />
     )
   }
 
   return (
     <div
-      className={`${dimension} ${color} rounded-full flex items-center justify-center flex-shrink-0 ring-2 ring-white`}
+      className={`${dimension} ${color} rounded-full flex items-center justify-center flex-shrink-0`}
       title={name}
+      style={{
+        border: '2px solid rgba(255, 255, 255, 0.15)',
+        boxShadow: '0 0 10px rgba(99, 102, 241, 0.15)',
+      }}
     >
       <span className={`${textSize} font-semibold text-white leading-none`}>
         {initials}
