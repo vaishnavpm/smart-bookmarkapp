@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(del \"d:\\\\Projects\\\\bookmarkapp\\\\src\\\\middleware.ts\")",
+      "Bash(powershell -Command \"Remove-Item ''d:\\\\Projects\\\\bookmarkapp\\\\src\\\\middleware.ts'' -Force\")"
+    ]
+  }
+}
